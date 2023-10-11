@@ -1,6 +1,9 @@
 #include "vmlinux.h"
 #include "bpf_sockops.h"
 
+char ____license[] SEC("license") = "GPL";
+int _version SEC("version") = 1;
+
 /*
  * extract the key identifying the socket source of the TCP event 
  */
@@ -46,7 +49,7 @@ void bpf_sockops_ipv4(struct bpf_sock_ops *skops)
 	}
 }
 
-__section("sockops")
+SEC("sockops")
 int bpf_sockops(struct bpf_sock_ops *skops)
 {
 	switch (skops->op) {
@@ -61,6 +64,3 @@ int bpf_sockops(struct bpf_sock_ops *skops)
         }
 	return 0;
 }
-
-char ____license[] __section("license") = "GPL";
-int _version __section("version") = 1;

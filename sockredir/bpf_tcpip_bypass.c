@@ -1,6 +1,7 @@
 #include "vmlinux.h"
 #include "bpf_sockops.h"
 
+char ____license[] SEC("license") = "GPL";
 
 /* extract the key that identifies the destination socket in the sock_ops_map */
 static inline
@@ -18,7 +19,7 @@ void sk_msg_extract_key(struct sk_msg_md *msg,
 }
 
 
-__section("sk_msg")
+SEC("sk_msg")
 int bpf_tcpip_bypass(struct sk_msg_md *msg)
 {
     struct  sock_key key = {};
@@ -36,5 +37,3 @@ int bpf_tcpip_bypass(struct sk_msg_md *msg)
 	}
 	return SK_PASS;
 }
-
-char ____license[] __section("license") = "GPL";

@@ -1,9 +1,5 @@
 #include "vmlinux.h"
-
-#ifndef __section
-#define __section(NAME) 	\
-	__attribute__((section(NAME), used))
-#endif
+#include "bpf/bpf_helpers.h"
 
 #define ___constant_swab32(x) ((__u32)(                         \
         (((__u32)(x) & (__u32)0x000000ffUL) << 24) |            \
@@ -62,18 +58,6 @@ static void BPF_FUNC(trace_printk, const char *fmt, int fmt_size, ...);
 
 // 127.0.0.1
 static const uint32_t lo_ip = 127 + (1 << 24);
-/*
- * Map definition
- * Why should we reuse the map definition bpf_elf_map
- * from iproute2/bpf_elf.h?
- */
-struct bpf_map_def {
-	uint32_t type;
-	uint32_t key_size;
-	uint32_t value_size;
-	uint32_t max_entries;
-	uint32_t map_flags;
-};
 
 struct sock_key {
 	uint32_t sip4;
@@ -89,11 +73,13 @@ struct sock_key {
 	uint32_t dport;
 } __attribute__((packed));
 
-
-struct bpf_map_def __section("maps") sock_ops_map = {
-	.type           = BPF_MAP_TYPE_SOCKHASH,
-	.key_size       = sizeof(struct sock_key),
-	.value_size     = sizeof(int),
-	.max_entries    = 65535,
-	.map_flags      = 0,
-};
+/*
+ * Map definition
+ */
+struct {
+	__uint(type, BPF_MAP_TYPE_SOCKHASH);
+	__type(key, struct sock_key);
+	__type(value, int);
+	__uint(max_entries, 65535);
+	__uint(map_flags, 0);
+} sock_ops_map SEC(".maps");
