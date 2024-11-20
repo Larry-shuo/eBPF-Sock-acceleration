@@ -59,6 +59,9 @@ static void BPF_FUNC(trace_printk, const char *fmt, int fmt_size, ...);
 // 127.0.0.1
 static const uint32_t lo_ip = 127 + (1 << 24);
 
+static const uint32_t podsubnet_s = 10 + (20 << 8);
+static const uint32_t podsubnet_e = 10 + (20 << 8) + (255 << 16) + (255 << 24);
+
 struct sock_key {
 	uint32_t sip4;
 	uint32_t dip4;

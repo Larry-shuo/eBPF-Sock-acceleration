@@ -100,18 +100,18 @@ To prepare a Linux development environment for eBPF development, various package
 1. Prepare Ubuntu 22.04
 2. Install the necessary tools
 	```bash
-	sudo apt-get install -y make gcc libssl-dev bc libelf-dev libcap-dev clang gcc-multilib llvm libncurses5-dev git pkg-config libmnl-dev bison flex graphviz iproute2
+	sudo apt install -y make gcc libssl-dev bc libelf-dev libcap-dev clang gcc-multilib llvm libncurses5-dev git pkg-config libmnl-dev bison flex graphviz iproute2
 	```
 3. Download the Linux kernel source
 	1. You will need to update source URIs in /etc/apt/source.list
 	2. Perform the following:
 		```bash
-		sudo apt-get update
-		sudo apt-get source linux-image-$(uname -r)
+		sudo apt update
+		sudo apt source linux-image-$(uname -r)
 		```
 		If it fails to download the source, try:
 		```bash
-		sudo apt-get source linux-image-unsigned-$(uname -r)
+		sudo apt source linux-image-unsigned-$(uname -r)
 		```
 	3. More information on Ubuntu [wiki](https://wiki.ubuntu.com/Kernel/BuildYourOwnKernel)
 4. Compile and install bpftool from source. It is not yet packaged as part of the standard distributions of Ubuntu. 
