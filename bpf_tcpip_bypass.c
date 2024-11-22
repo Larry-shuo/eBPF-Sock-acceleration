@@ -25,10 +25,16 @@ int bpf_tcpip_bypass(struct sk_msg_md *msg)
     struct  sock_key key = {};
     sk_msg_extract_key(msg, &key);
 
-	if(key.sip4 != lo_ip && key.dip4 != lo_ip){
-		return SK_PASS;
-	}
-	
+	// if(key.sip4 != lo_ip && key.dip4 != lo_ip){
+	// 	return SK_PASS;
+	// }
+
+	// if( ((key.sip4 << 16) >> 16) != podsubnet && ((key.dip4 << 16) >> 16) != podsubnet ){
+	// 	return SK_PASS;
+	// }
+
+	// printk("redirect After filter: sip: %pI4, dip: %pI4.",&key.sip4, &key.dip4);
+
     u32 flag = msg_redirect_hash(msg, &sock_ops_map, &key, BPF_F_INGRESS);
 
 	if(flag == SK_PASS){

@@ -45,6 +45,10 @@
     })
 #endif
 
+// 127.0.0.1
+static const uint32_t lo_ip = 127 + (1 << 24);
+
+static const unsigned int podsubnet = 10 + (244 << 8);
 
 /* ebpf helper function
  * The generated function is used for parameter verification
@@ -55,12 +59,6 @@ static int BPF_FUNC(msg_redirect_hash, struct sk_msg_md *md,
 static int BPF_FUNC(sock_hash_update, struct bpf_sock_ops *skops,
 			void *map, void *key, uint64_t flags);
 static void BPF_FUNC(trace_printk, const char *fmt, int fmt_size, ...);
-
-// 127.0.0.1
-static const uint32_t lo_ip = 127 + (1 << 24);
-
-static const uint32_t podsubnet_s = 10 + (20 << 8);
-static const uint32_t podsubnet_e = 10 + (20 << 8) + (255 << 16) + (255 << 24);
 
 struct sock_key {
 	uint32_t sip4;

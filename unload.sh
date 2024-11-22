@@ -7,8 +7,9 @@ sleep 1
 sudo rm "/sys/fs/bpf/bpf_tcpip_bypass"
 sleep 1
 
+cgroup_path=/sys/fs/cgroup/kubepods.slice/
 # Detach and unload the bpf_sockops_v4 program
-sudo bpftool cgroup detach "/sys/fs/cgroup/" sock_ops pinned "/sys/fs/bpf/bpf_sockops"
+sudo bpftool cgroup detach "$cgroup_path" sock_ops pinned "/sys/fs/bpf/bpf_sockops"
 sleep 1
 sudo rm "/sys/fs/bpf/bpf_sockops"
 sleep 1

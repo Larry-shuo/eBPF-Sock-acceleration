@@ -21,8 +21,10 @@ clang -O2 -g -target bpf -c bpf_sockops.c -o bpf_sockops.o
 
 # Load and attach the bpf_sockops program
 sudo bpftool prog load bpf_sockops.o "/sys/fs/bpf/bpf_sockops"
+
 # get the cgroup filesystem path
-cgroup_path=$(mount | grep 'cgroup' | awk 'NR==1{print $3}' )
+# cgroup_path=$(mount | grep 'cgroup' | awk 'NR==1{print $3}' )
+cgroup_path=/sys/fs/cgroup/kubepods.slice/
 sudo bpftool cgroup attach "$cgroup_path" sock_ops pinned "/sys/fs/bpf/bpf_sockops"
 
 # Extract the id of the sockhash map used by the bpf_sockops program
