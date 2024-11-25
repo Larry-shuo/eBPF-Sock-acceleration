@@ -10,6 +10,7 @@ void sk_msg_extract_key(struct sk_msg_md *msg,
 {
 	key->sip4 = msg->remote_ip4;
 	key->dip4 = msg->local_ip4;
+	// printk("sip :%pi4, dip=%pi4",bpf_ntohl( key->sip4 ), bpf_ntohl(key->dip4));
 
 	key->family = 1;
 
@@ -32,8 +33,13 @@ int bpf_tcpip_bypass(struct sk_msg_md *msg)
 	// 	return SK_PASS;
 	// }
 
+	// printk("redirect After filter: sip: %pI4, dip: %pI4.",&key.sip4, &key.dip4);
 
     u32 flag = msg_redirect_hash(msg, &sock_ops_map, &key, BPF_F_INGRESS);
 
+	if(flag == SK_PASS){
+		printk("sock_msg_redirect by sockmap: %pI4 --> %pI4", &key.sip4, &key.dip4);
+		printk("sock_msg_redirect by sockmap: %d --> %d", bpf_ntohl(msg->remote_port), msg->local_port);
+	}
 	return SK_PASS;
 }

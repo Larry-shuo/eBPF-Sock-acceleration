@@ -38,7 +38,16 @@ void bpf_sockops_ipv4(struct bpf_sock_ops *skops)
 	
 	// insert the source socket in the sock_ops_map
 	int ret = sock_hash_update(skops, &sock_ops_map, &key, BPF_NOEXIST);
-
+	
+	printk("update sockmap: %pI4 -> %pI4",&key.sip4, &key.dip4);
+	if(skops->op == 4){
+		printk("update sockmap: op=%d(Passive connect), port %d-->%d\n",
+				skops->op, skops->local_port, bpf_ntohl(skops->remote_port));
+	}
+	else if(skops->op == 5){
+		printk("update sockmap: op=%d(Active connect), port %d-->%d\n",
+				skops->op, skops->local_port, bpf_ntohl(skops->remote_port));
+	}
 	if (ret != 0) {
 		printk("FAILED: sock_hash_update ret: %d\n", ret);
 	}
